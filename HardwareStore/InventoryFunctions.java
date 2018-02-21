@@ -1,3 +1,13 @@
+/**
+ *    A class containing database functions
+ @author Dimeji Faluyi
+ @version 2/7/2018
+ @see InventoryFunctions
+ @see UserInterface
+ *
+ *
+ */
+
 import java.util.Arrays;
 import java.util.Scanner;
 import java.util.ArrayList;
@@ -21,20 +31,21 @@ public class InventoryFunctions
   */
   private List<Item> items;
   public InventoryFunctions(){
-          items = new ArrayList<Item>();
-     }
- public InventoryFunctions(String FILENAME){
-         items = new ArrayList<Item>();
-         try{
-           loadFromFile(FILENAME);
-         }
-         catch(FileNotFoundException e)
-         {
-           System.out.print("Please check to make sure file exist and ");
-           System.out.println("is in same directory as program");
-           System.out.println(e);
-         }
-    }
+    items = new ArrayList<Item>();
+  }
+
+  public InventoryFunctions(String FILENAME){
+   items = new ArrayList<Item>();
+   try{
+     loadFromFile(FILENAME);
+   }
+   catch(FileNotFoundException e)
+   {
+     System.out.print("Please check to make sure file exist and ");
+     System.out.println("is in same directory as program");
+     System.out.println(e);
+   }
+  }
 
   /**
   *
@@ -72,8 +83,8 @@ public class InventoryFunctions
   */
 
   private  void displayItems(List<Item> subSet){
-     tableFormat = "|%10s|%20s|%20s|%10s|%10.2f|\n";
-     headingFormat = "|%10s|%20s|%20s|%10s|%10s|\n";
+    tableFormat = "|%10s|%20s|%20s|%10s|%10.2f|\n";
+    headingFormat = "|%10s|%20s|%20s|%10s|%10s|\n";
     System.out.print("---------------------------------------------------");
     System.out.println("--------------------------------------");
     System.out.printf(headingFormat,"ID#",  "Name","Category","Quantity","Price");
@@ -149,7 +160,6 @@ public class InventoryFunctions
       addOrRemoveQuantity(index,"remove");
     }
 
-    in.close();
   }
 
   /**
@@ -171,7 +181,6 @@ public class InventoryFunctions
       displayItems(filterdItems);
     }
 
-    in.close();
     return 0;
   }
 
@@ -205,7 +214,6 @@ public class InventoryFunctions
     items.get(index).setQuantity(amount);
     System.out.println("The updated item");
     displayItem(index,items);
-    in.close();
   }
 
 
@@ -224,7 +232,6 @@ public class InventoryFunctions
     List<Item> filterdItems = new ArrayList<Item>();
     filterdItems = filter(item -> item.getQuantity() < quantity,items);
     displayItems(filterdItems);
-    in.close();
   }
 
 
@@ -261,6 +268,7 @@ public class InventoryFunctions
 		}
 		catch(FileNotFoundException fe){
 			System.out.println(fe);
+
 		}
 	}
 

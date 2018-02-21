@@ -1,40 +1,48 @@
 /**
  *    A class for creating item
- *    */
+
+@author Dimeji Faluyi
+@version 2/7/2018
+@see InventoryFunctions
+@see UserInterface
+*
+*/
  import java.util.UUID;
 
 
 public class Item
 {
 	  /**
-	   *   Constructs a Item object that saves the name of a item.
-	   *   @param aItem the name of the person.
+	   *   Constructs a Item object
+         @param aID the the item id.
+     *   @param aItemName the item name
+         @param aQuantity the item quantity
+         @param aPrice the item price
 	   *
      */
-	   public Item(String aID, String aItemName, String aCategory, int aQuantity, float aPrice){
+	   public Item(String aID, String aItemName, int aQuantity, float aPrice){
              if(aID.isEmpty()){
                id = aItemName+"-"+UUID.randomUUID().toString().substring(0,5);
              }else{
                id = aID;
              }
 		         itemName = aItemName;
-             category = aCategory;
              quantity = aQuantity;
              price = aPrice;
 			    }
 
 	      /**
 	       *       Setter sets name
-	       *             @return assigns aItemName to field itemName.
+	       *             @param  aItemName the name of an item
 	       *                */
-	      public void setName(String aItemName){
+	      protected final void setName(String aItemName){
 		             itemName = aItemName;
 			        }
         /**
          *       Setter sets quantity
-         *             @return assigns aQuantity to field quantity.
+         *             @param  aQuantity the quantity amount
          *                */
-        public void setQuantity(int aQuantity){
+        protected final void setQuantity(int aQuantity){
                   quantity = aQuantity;
                }
 
@@ -42,39 +50,32 @@ public class Item
 		     *       Getter
 		     *             @return class name.
 		     *                */
-	      public String getName(){
+	      protected final String getName(){
 			      return itemName;
 			          }
         /**
          *       Getter
          *             @return item quantity.
          *                */
-        public int getQuantity(){
+        protected final int getQuantity(){
             return quantity;
                 }
   			/**
   			 *       Getter
   			 *             @return item id.
   			 *                */
-  			public String getId(){
+  			protected final String getId(){
   					return id;
   							}
         /**
 					 *       Getter
 					 *             @return item price.
 					 *                */
-					public float getPrice(){
+					protected final float getPrice(){
 							return price;
 									}
-        /**
-					 *       Getter
-					 *             @return item category.
-					 *                */
-					public String getCategory(){
-							return category;
-									}
+
 		     private String itemName;
-         private String category;
 				 private String id;
          private int quantity;
          private float price;
