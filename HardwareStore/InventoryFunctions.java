@@ -2,8 +2,10 @@
  *    A class containing database functions
  @author Dimeji Faluyi
  @version 2/7/2018
- @see InventoryFunctions
  @see UserInterface
+ @see Item
+ @see user
+ @see employee
  *
  *
  */
