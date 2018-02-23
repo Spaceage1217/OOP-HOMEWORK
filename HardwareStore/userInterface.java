@@ -18,7 +18,7 @@ public class UserInterface
 {
    public static void main(String[] args)
    {
-      String FILENAME = "database.txt";
+      String inventory_DB_File = "database.txt";
       InventoryFunctions storage;
 
 
@@ -53,15 +53,15 @@ public class UserInterface
           break;
         case 2:
           System.out.println("Please input the file name");
-          FILENAME = in.next();
+          inventory_DB_File = in.next();
           break;
       }
 
-      if(FILENAME.equals("")){
+      if(inventory_DB_File.equals("")){
         storage = new InventoryFunctions();
       }
       else{
-          storage =  new InventoryFunctions(FILENAME);
+          storage =  new InventoryFunctions(inventory_DB_File);
       }
 
       do{
@@ -110,13 +110,13 @@ public class UserInterface
           case 6:
             try {
                 System.out.println("Saving Inventory...");
-                storage.writeToFile(FILENAME);
+                storage.writeToFile(inventory_DB_File);
               }
             catch(IOException e){
                 System.out.println("ERROR Saving, Please check that");
                 System.out.println("1.File has not been deleted");
                 System.out.println("2.You have permission ");
-                System.out.println("to write to " + FILENAME);
+                System.out.println("to write to " + inventory_DB_File);
                 System.out.println(e);
             }
             //Exit the program

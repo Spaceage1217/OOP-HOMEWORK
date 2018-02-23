@@ -22,7 +22,7 @@ public class Item
      */
 	   public Item(String aID, String aItemName, int aQuantity, float aPrice){
              if(aID.isEmpty()){
-               id = aItemName+"-"+UUID.randomUUID().toString().substring(0,5);
+               id = aItemName+"-"+ UUID.randomUUID().toString().substring(0,5);
              }else{
                id = aID;
              }

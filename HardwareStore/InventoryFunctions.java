@@ -1,5 +1,5 @@
 /**
- *    A class containing database functions
+ *    A class containing database functions for inventory
  @author Dimeji Faluyi
  @version 2/7/2018
  @see UserInterface
@@ -22,8 +22,10 @@ import java.io.FileReader;
 import java.io.IOException;
 import java.io.PrintWriter;
 import java.io.FileWriter;
+import java.util.UUID;
 
-public class InventoryFunctions
+
+public class InventoryFunctions implements Serializable
 {
 
   /**
@@ -32,14 +34,16 @@ public class InventoryFunctions
   *
   */
   private List<Item> items;
+  private String inventory_DB_File;
   public InventoryFunctions(){
     items = new ArrayList<Item>();
   }
 
-  public InventoryFunctions(String FILENAME){
+  public InventoryFunctions(String aInventory_DB_File){
    items = new ArrayList<Item>();
+   inventory_DB_File = aInventory_DB_File;
    try{
-     loadFromFile(FILENAME);
+     loadFromFile(inventory_DB_File);
    }
    catch(FileNotFoundException e)
    {
@@ -166,7 +170,7 @@ public class InventoryFunctions
 
   /**
   *
-  *   Search for item in inventory
+  *   Search for item in inventory given its name
       @return index of item
   *
   */
@@ -179,12 +183,35 @@ public class InventoryFunctions
     filterdItems = filter(item -> item.getName().contains(query),items);
     if(filterdItems.isEmpty()){
       System.out.println("Item not found");
+      return -1;
     }else{
       displayItems(filterdItems);
     }
 
     return 0;
   }
+
+
+    /**
+    *
+    *   Search for item in inventory given its ID
+        @return item
+    *
+    */
+    public Item search(String itemID){
+      Item filterdItems = new ArrayList<Item>();
+      filterdItems = filter(item -> item.getId().contains(itemID),items);
+      if(filterdItems.isEmpty()){
+        return null;
+      }else{
+        return filterdItems.get(0);
+        displayItems(filterdItems);
+      }
+      return 0;
+    }
+
+
+
 
   /**
   *
@@ -241,14 +268,14 @@ public class InventoryFunctions
 
   /**
 	Loads data from database text file
-	@param FILENAME is the name of the previous database file
-	@throws FileNotFoundException when there is no previous database file matching the FILENAME
+	@param inventory_DB_File is the name of the previous database file
+	@throws FileNotFoundException when there is no previous database file matching the inventory_DB_File
 	*/
-	private void loadFromFile(String FILENAME) throws FileNotFoundException
+	private void loadFromFile(String inventory_DB_File) throws FileNotFoundException
 	{
 		try{
 			Item item;
-			FileReader fr = new FileReader(FILENAME);
+			FileReader fr = new FileReader(inventory_DB_File);
 			Scanner inFile = new Scanner(fr);
 			String line;
 			String[] fields = new String[5];
@@ -276,17 +303,17 @@ public class InventoryFunctions
 
   /**
   Writes data to database txt file
-  @param FILENAME is the name of the previous database file
+  @param inventory_DB_File is the name of the previous database file
   @throws IOException if error writing to file
   */
-  public void writeToFile(String FILENAME) throws IOException
+  public void writeToFile(String inventory_DB_File) throws IOException
   {
       FileWriter fw;
-  		if(FILENAME.equals("")){ //if no previous database on file, automatically creates one named "packages.txt"
+  		if(inventory_DB_File.equals("")){ //if no previous database on file, automatically creates one named "packages.txt"
   			fw = new FileWriter("input.txt", false);
   		}
   		else {
-  			fw = new FileWriter(FILENAME, false); //overwrites data presently in file, if any
+  			fw = new FileWriter(inventory_DB_File, false); //overwrites data presently in file, if any
   		}
 
   		PrintWriter outFile = new PrintWriter(fw);

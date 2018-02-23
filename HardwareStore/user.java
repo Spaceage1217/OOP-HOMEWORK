@@ -63,6 +63,16 @@ public class User{
         return lastName;
     }
 
+    /**
+     *  Getter
+     *  @return User last name.
+     *
+     */
+    protected final int getID(){
+        return ID;
+    }
+
+
     private int ID;
     private String firstName;
     private String lastName;

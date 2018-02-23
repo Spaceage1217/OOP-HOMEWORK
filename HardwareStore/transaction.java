@@ -16,7 +16,6 @@ import java.util.Date;
 public class Transaction implements Serializable{
 
 
-
   public Transaction(
           String aItemID,
           Date aSaleDate,
@@ -31,16 +30,50 @@ public class Transaction implements Serializable{
         employeeID = aEmployeeID;
   }
 
-  // might not need setters and getters
-  // /**
-  //   * Setter
-  //   *  @param aItemID the id for the item in the transaction
-  //   */
-  //
-  //  public void setItemID(String aItemID){
-  //      itemID = aItemID;
-  //  }
+  /**
+   * Getter
+   * @return item id.
+   *
+  */
+  protected final String getItemId(){
+      return itemID;
+  }
 
+  /**
+   * Getter
+   * @return saleDate.
+   *
+  */
+  protected final Date getSaleDate(){
+      return saleDate;
+  }
+
+  /**
+   * Getter
+   * @return saleQuantity.
+   *
+  */
+  protected final int getSaleQuantity(){
+      return saleQuantity;
+  }
+
+  /**
+   * Getter
+   * @return customer id.
+   *
+  */
+  protected final int getCustomerID(){
+      return customerID;
+  }
+
+  /**
+   * Getter
+   * @return employee id.
+   *
+  */
+  protected final int getEmployeeID(){
+      return employeeID;
+  }
 
 
   private String itemID;
