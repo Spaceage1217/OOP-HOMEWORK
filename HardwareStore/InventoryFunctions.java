@@ -51,6 +51,11 @@ public class InventoryFunctions implements Serializable
      System.out.println("is in same directory as program");
      System.out.println(e);
    }
+   catch(IOException e)
+   {
+     System.out.println("Please enter the input the file named " + inventory_DB_File);
+     System.out.println(e);
+   }
   }
 
   /**
@@ -264,41 +269,187 @@ public class InventoryFunctions implements Serializable
   }
 
 
+  /**
+  *
+  *   A function to add a new item to the database
+  *
+      @param  type a string that tells the item what type to create "smallHardwareItems" or "appliances"
+      @return new item
+  *
+  */
+  public Item addItem(String type){
+    Scanner in = new Scanner(System.in);
+    String itemName;
+    String id ="";
+    int quantity;
+    float price;
+    String category;
+    String brand;
+    String type;
+    String applianceType;
+    int choice;
+    Item newItem;
 
+    System.out.println("Enter the "+type+"'s Name");
+    itemName = in.nextLine();
+    System.out.println("Enter the quantity of the item");
+    while(!in.hasNextInt()){
+      System.out.println("Invalid input");
+      System.out.println("Please enter numbers only");
+      in.next();
+    }
+    quantity = in.nextInt();
+    System.out.println("Enter the price of the item");
+    while(!in.hasNextFloat()){
+      System.out.println("Invalid input");
+      System.out.println("Please enter numbers only");
+      in.next();
+    }
+    price = in.nextFloat();
+
+    if(type == "smallHardwareItems"){
+      System.out.println("Which category does the item belong to");
+      System.out.println("Enter 1 for Door&Window");
+      System.out.println("Enter 2 for Cabinet&Furniture");
+      System.out.println("Enter 3 for Fasteners");
+      System.out.println("Enter 4 for Structural");
+      System.out.println("Enter 5 for Other");
+      while(!in.hasNextInt()){
+        System.out.println("Invalid input");
+        System.out.println("Please enter numbers only");
+        in.next();
+      }
+      choice = in.nextInt();
+      while(choice > 5 || choice < 1){
+        System.out.println("Invalid input");
+        System.out.println("Please pick from one of the following catogries");
+        System.out.println("Enter 1 for Door&Window");
+        System.out.println("Enter 2 for Cabinet&Furniture");
+        System.out.println("Enter 3 for Fasteners");
+        System.out.println("Enter 4 for Structural");
+        System.out.println("Enter 5 for Other");
+        while(!in.hasNextInt()){
+          System.out.println("Invalid input");
+          System.out.println("Please enter numbers only");
+          in.next();
+        }
+        choice = in.nextInt();
+      }
+
+      switch(choice){
+        case 1:
+          category = "Door&Window";
+          break;
+        case 2:
+          category = "Cabinet&Furniture";
+          break;
+        case 3:
+          category = "Fasteners";
+        case 4:
+          category = "Structural";
+        case 5:
+          category = "Other"
+      }
+      newItem = new SmallHardwareItem(
+                    id,
+                    itemName,
+                    quantity,
+                    price,
+                    category
+                );
+    }
+
+    if(type == "appliances"){
+      System.out.println("Enter the brand Name");
+      brand = in.nextLine();
+      System.out.println("Which type does the item belong to");
+      System.out.println("Enter 1 for Refrigerators");
+      System.out.println("Enter 2 for Washers&Dryers");
+      System.out.println("Enter 3 for Ranges&Ovens");
+      System.out.println("Enter 4 for Small Appliences");
+      System.out.println("Enter 5 for Other");
+      while(!in.hasNextInt()){
+        System.out.println("Invalid input");
+        System.out.println("Please enter numbers only");
+        in.next();
+      }
+      choice = in.nextInt();
+      while(choice > 5 || choice < 1){
+        System.out.println("Invalid input");
+        System.out.println("Please pick from one of the following types");
+        System.out.println("Enter 1 for Refrigerators");
+        System.out.println("Enter 2 for Washers&Dryers");
+        System.out.println("Enter 3 for Ranges&Ovens");
+        System.out.println("Enter 4 for Small Appliences");
+        System.out.println("Enter 5 for Other");
+        while(!in.hasNextInt()){
+          System.out.println("Invalid input");
+          System.out.println("Please enter numbers only");
+          in.next();
+        }
+        choice = in.nextInt();
+      }
+
+      switch(choice){
+        case 1:
+          applianceType = "Refrigerators";
+          break;
+        case 2:
+          applianceType = "Washers&Dryers";
+          break;
+        case 3:
+          applianceType = "Ranges&Ovens";
+        case 4:
+          applianceType = "Small Appliences";
+        case 5:
+          applianceType = "Other"
+      }
+
+      newItem = new Appliances(
+                    id,
+                    itemName,
+                    quantity,
+                    price,
+                    brand,
+                    applianceType,
+                );
+
+    }
+
+    itmes.add(newItem);
+    return newItem;
+
+  }
+
+  /**
+  *
+  *   A function to delete a item from the database
+  *
+      @param  ID a id for the item in the database
+      @return new item
+  *
+  */
+  public int deletItem(int ID){
+    for (Item item : subSet){
+      if(item.getId == ID){
+        items.remove(item);
+        return 0;
+      }
+    }
+    return -1;
+  }
 
   /**
 	Loads data from database text file
 	@param inventory_DB_File is the name of the previous database file
 	@throws FileNotFoundException when there is no previous database file matching the inventory_DB_File
+  @throws IOException if input file name not entered properly.
 	*/
-	private void loadFromFile(String inventory_DB_File) throws FileNotFoundException
+	private void loadFromFile(String inventory_DB_File) throws Exception
 	{
-		try{
-			Item item;
-			FileReader fr = new FileReader(inventory_DB_File);
-			Scanner inFile = new Scanner(fr);
-			String line;
-			String[] fields = new String[5];
-
-			while(inFile.hasNextLine()){
-        line = inFile.nextLine();
-				fields = line.split("~");
-        item = new Item(
-                        fields[0],
-                        fields[1],
-                        fields[2],
-                        Integer.valueOf(fields[3]),
-                        Float.valueOf(fields[4])
-                        );
-				items.add(item);
-			}
-
-      inFile.close();
-		}
-		catch(FileNotFoundException fe){
-			System.out.println(fe);
-
-		}
+    FileInputStream fis = new FileInputStream(db_File);
+    ObjectInputStream ois = new ObjectInputStream(fis);
+    items = (ArrayList<Item>) ois.readObject();
 	}
 
   /**
@@ -306,29 +457,18 @@ public class InventoryFunctions implements Serializable
   @param inventory_DB_File is the name of the previous database file
   @throws IOException if error writing to file
   */
-  public void writeToFile(String inventory_DB_File) throws IOException
+  public void writeToFile(String inventory_DB_File) throws Exception
   {
-      FileWriter fw;
-  		if(inventory_DB_File.equals("")){ //if no previous database on file, automatically creates one named "packages.txt"
-  			fw = new FileWriter("input.txt", false);
-  		}
-  		else {
-  			fw = new FileWriter(inventory_DB_File, false); //overwrites data presently in file, if any
-  		}
+    try {
+        FileOutputStream fos = new FileOutputStream(users_DB_File);
+        ObjectOutputStream oos = new ObjectOutputStream(fos);
 
-  		PrintWriter outFile = new PrintWriter(fw);
-
-  		for (Item item : items){
-  			outFile.printf(
-                 outputFormat,
-                 item.getId(),
-                 item.getName(),
-                 item.getCategory(),
-                 item.getQuantity(),
-                 item.getPrice()
-  						   );
-  		}
-  		outFile.close();
+        oos.writeObject(items);
+        oos.close();
+    }
+    catch (IOException e) {
+        System.out.println("Error: Cannot write to " + inventory_DB_File + ".");
+    }
   }
 
 
@@ -348,7 +488,6 @@ public class InventoryFunctions implements Serializable
   }
 
 
-  private String outputFormat = "%s~%s~%s~%s~%.2f\n";
   private String tableFormat = "|%5s|%10s|%20s|%20s|%10s|%10.2f|\n";
   private String headingFormat = "|%5s|%10s|%20s|%20s|%10s|%10s|\n";
 }

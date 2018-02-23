@@ -18,11 +18,12 @@ public class Item
      *   @param aItemName the item name
          @param aQuantity the item quantity
          @param aPrice the item price
+         @param aCategory the item category
 	   *
      */
-	   public Item(String aID, String aItemName, int aQuantity, float aPrice){
+	   public Item(String aID, String aItemName, int aQuantity, float aPrice, String aCategory){
              if(aID.isEmpty()){
-               id = aItemName+"-"+ UUID.randomUUID().toString().substring(0,5);
+               id = (aItemName).substring(0,2)+ UUID.randomUUID().toString().substring(0,3);
              }else{
                id = aID;
              }
@@ -74,6 +75,7 @@ public class Item
 					protected final float getPrice(){
 							return price;
 									}
+        
 
 		     private String itemName;
 				 private String id;

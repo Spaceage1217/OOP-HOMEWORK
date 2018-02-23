@@ -9,6 +9,11 @@
  *
  *
  */
+//to do 5 and 7
+// show a list of users in the DB
+// update user info given id
+
+
 
 import java.util.Arrays;
 import java.util.Scanner;
@@ -57,6 +62,7 @@ public class UserDatabase implements Serializable{
     Loads data from database text file
     @param db_File is the name of the previous database file
     @throws FileNotFoundException when there is no previous database file matching the transaction_DB_File
+    @throws IOException if input file name not entered properly.
     */
 
     private void loadFromFile(String db_File) throws Exception
@@ -155,7 +161,7 @@ public class UserDatabase implements Serializable{
         System.out.println("Please enter a address");
         address = in.nextLine();
 
-        newUser = new Array<Customer>(
+        newUser = new Customer(
                           userID,
                           firstName,
                           lastName,
@@ -163,7 +169,6 @@ public class UserDatabase implements Serializable{
                           address
                         );
       }
-
 
       if(type == "employee"){
         System.out.println("Please enter a 9 digit social security number (XXXXXXXXX no dashes just digits)");
@@ -187,7 +192,6 @@ public class UserDatabase implements Serializable{
           digitLength =  String.valueOf(SSN).length();
         }
         System.out.println("Please enter a monthly salary in the form (xxxx.xx)");
-        monthlySalary = in.nextFloat();
         while(!in.hasNextFloat()){
           System.out.println("Invalid input");
           System.out.println("Please enter numbers only");
@@ -196,7 +200,7 @@ public class UserDatabase implements Serializable{
         monthlySalary = in.nextFloat();
 
 
-        newUser = new Array<Employee>(
+        newUser = new Employee(
                           userID,
                           firstName,
                           lastName,
