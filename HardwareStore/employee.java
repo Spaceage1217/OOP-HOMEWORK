@@ -24,7 +24,7 @@ public class Employee extends User{
     *  @param aSSN the name of the SSN for the Emoloyee
     */
 
-   public void setSSN(String aSSN){
+   public void setSSN(int aSSN){
      SSN = aSSN;
    }
 
@@ -33,7 +33,7 @@ public class Employee extends User{
    *  @param aMonthlySalary the monthly salary for the Emoloyee
    */
 
-  public void setSalary(String aMonthlySalary){
+  public void setSalary(float aMonthlySalary){
     monthlySalary = aMonthlySalary;
   }
 
@@ -53,7 +53,7 @@ public class Employee extends User{
     *
     */
 
-   public float getMonthlySalar(){
+   public float getMonthlySalary(){
        return monthlySalary;
    }
 

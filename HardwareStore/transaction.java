@@ -25,7 +25,7 @@ public class Transaction implements Serializable{
         ){
         itemID = aItemID;
         saleDate = aSaleDate;
-        saleQuantity = aQuantity;
+        saleQuantity = aSaleQuantity;
         customerID = aCustomerID;
         employeeID = aEmployeeID;
   }

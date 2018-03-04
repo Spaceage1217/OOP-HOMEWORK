@@ -25,26 +25,33 @@ import java.io.IOException;
 import java.io.PrintWriter;
 import java.io.FileWriter;
 
+import java.text.ParseException;
+import java.io.*;
+import java.text.SimpleDateFormat;
+
 
 public class TransactionDB implements Serializable{
+
+  private static final long serialVersionUID = 1L;
 
   private List<Transaction> transactions;
   private InventoryFunctions itemStorage;
   private UserDatabase userDB;
-
+  String transaction_DB_File;
 
   public TransactionDB(InventoryFunctions aItemStorage,UserDatabase aUserDB){
     itemStorage = aItemStorage;
-    userDB = aUserStorage;
-    transactions = new ArrayList<Transactions>();
+    userDB = aUserDB;
+    transactions = new ArrayList<Transaction>();
   }
 
-  public TransactionDB(String transaction_DB_File, InventoryFunctions aItemStorage,UserDatabase aUserDB){
+  public TransactionDB(String aTransaction_DB_File, InventoryFunctions aItemStorage,UserDatabase aUserDB) throws Exception{
     itemStorage = aItemStorage;
-    userDB = aUserStorage;
-    transactions = new ArrayList<Transactions>();
+    userDB = aUserDB;
+    transactions = new ArrayList<Transaction>();
+    transaction_DB_File = aTransaction_DB_File;
     try{
-      loadFromFile(transaction_DB_File);
+      loadFromFile();
     }
     catch(FileNotFoundException e)
     {
@@ -74,44 +81,18 @@ public class TransactionDB implements Serializable{
     int choice;
     Scanner in = new Scanner(System.in);
 
-
     //ID
-    do{
-      System.out.println("Please enter the ID of the item that is being");
+
+      System.out.print("Please enter the ID of the item that is being ");
       System.out.println("purchased");
-      while(!in.hasNextInt()){
-        System.out.println("Invalid input");
-        System.out.println("Please enter numbers only");
-        in.next();
-      }
-      itemID = in.nextInt();
+      itemStorage.displayItems();
+      itemID = in.nextLine();
       item =  findID(itemID);
       if(item == null){
         System.out.println("ItemID does not exist");
-        System.out.println("Press 1 to try again or 2 quit");
-        while(!in.hasNextInt()){
-          System.out.println("Invalid input");
-          System.out.println("Please enter numbers only");
-          in.next();
-        }
-        choice = in.nextInt();
-        while(choice > 2 || choice < 1){
-          System.out.println("Invalid input");
-          System.out.println("Press 1 to try again or 2 quit");
-          while(!in.hasNextInt()){
-            System.out.println("Invalid input");
-            System.out.println("Please enter 1 or 2");
-            in.next();
-          }
-          choice = in.nextInt();
-        }
-        if(choice == 2){
-          return -1;
-        }
-      }else{
-        choice = 2;
+        return -1;
       }
-    }while(choice != 2);
+
     //DATE
     saleDate = getDate();
     if(saleDate == null){
@@ -121,7 +102,7 @@ public class TransactionDB implements Serializable{
 
     //quantity
     do{
-      System.out.println("Please enter the quantity of the item that is being");
+      System.out.print("Please enter the quantity of the item that is being ");
       System.out.println("purchased");
       while(!in.hasNextInt()){
         System.out.println("Invalid input");
@@ -129,29 +110,13 @@ public class TransactionDB implements Serializable{
         in.next();
       }
       quantity = in.nextInt();
-      private int currentQuantityAvalabile = item.getQuantity();
+      int currentQuantityAvalabile = item.getQuantity();
+      choice = 2;
       while(currentQuantityAvalabile<quantity){
         System.out.print("The current quantity of the item you want is lower than ");
         System.out.println("the current quantity of that item ");
-        System.out.println("Press 1 to try again or 2 quit");
-        while(!in.hasNextInt()){
-          System.out.println("Invalid input");
-          System.out.println("Please enter numbers only");
-          in.next();
-        }
-        choice = in.nextInt();
-        while(choice > 2 || choice < 1){
-          System.out.println("Invalid input");
-          System.out.println("Press 1 to try again or 2 quit");
-          while(!in.hasNextInt()){
-            System.out.println("Invalid input");
-            System.out.println("Press 1 to try again or 2 quit");
-            in.next();
-          }
-          choice = in.nextInt();
-        }
-        if( choice == 1 ){
-          System.out.println("please enter a quantity less than" + currentQuantityAvalabile);
+
+          System.out.println("please enter a quantity less than " + currentQuantityAvalabile);
           while(!in.hasNextInt()){
             System.out.println("Invalid input");
             System.out.println("Please enter numbers only");
@@ -159,19 +124,13 @@ public class TransactionDB implements Serializable{
           }
           quantity = in.nextInt();
         }
-        else if(choice == 2){
-          return -1;
-        }
-      }
-      else{
-        choice = 2;
-      }
     }while(choice != 2);
 
     //customerID
     do{
-      System.out.print("Please enter the ID of the customer making the");
+      System.out.print("Please enter the ID of the customer making the ");
       System.out.println("purchase");
+      userDB.displayUsers("customer");
       while(!in.hasNextInt()){
         System.out.println("Invalid input");
         System.out.println("Please enter numbers only");
@@ -220,6 +179,7 @@ public class TransactionDB implements Serializable{
     do{
       System.out.print("Please enter the ID of the employee completing the");
       System.out.println("purchase");
+      userDB.displayUsers("employee");
       while(!in.hasNextInt()){
         System.out.println("Invalid input");
         System.out.println("Please enter numbers only");
@@ -264,9 +224,12 @@ public class TransactionDB implements Serializable{
         choice = 3;
       }
     }while(choice != 3);
-    System.out.println("adding transaction to the database...")
+    System.out.println("adding transaction to the database...");
     Transaction newTransaction = new Transaction(itemID,saleDate,quantity,customerID,employeeID);
     transactions.add(newTransaction);
+    quantity = item.getQuantity()-quantity;
+    item.setQuantity(quantity);
+    return 0;
   }
 
   /**
@@ -286,23 +249,25 @@ public class TransactionDB implements Serializable{
   @return date that the user sets
   */
   private Date getDate(){
-    //dates
+    Scanner in = new Scanner(System.in);
     Date date = new Date();
-    String format = "MM-dd-yyyy"
+    String format = "MM-dd-yyyy";
     SimpleDateFormat sdf = new SimpleDateFormat(format);
+    boolean hasFailed = false;
     System.out.println("Please enter todays date");
     System.out.println("with the format (MM-dd-yyyy)");
     while (true){
         String str = in.nextLine();
-        if(str == "1"){
+        if(str.equals("1") && hasFai){
           date = null;
           return date ;
         }
         try {
-            saleDate = sdf.parse(str);
+            date = sdf.parse(str);
         } catch (ParseException e) {
             System.out.println("Invalid date please enter a date with the format (MM-dd-yyyy)");
             System.out.println("Or press 1 to quit");
+            hasFailed = true;
             continue;
         }
         break;
@@ -316,14 +281,21 @@ public class TransactionDB implements Serializable{
 
   /**
   Loads data from database text file
-  @param db_File is the name of the previous database file
   @throws FileNotFoundException when there is no previous database file matching the transaction_DB_File
   */
-  private void loadFromFile(String db_File) throws Exception
+  private void loadFromFile() throws Exception
   {
-    FileInputStream fis = new FileInputStream(db_File);
-    ObjectInputStream ois = new ObjectInputStream(fis);
-    transactions = (ArrayList<Transaction>) ois.readObject();
+     try{
+      FileInputStream fis = new FileInputStream(transaction_DB_File);
+      ObjectInputStream ois = new ObjectInputStream(fis);
+      transactions = (ArrayList<Transaction>) ois.readObject();
+     }
+     catch (FileNotFoundException e) {
+          FileOutputStream fos = new FileOutputStream(transaction_DB_File, false);
+      }
+      catch (IOException e) {
+        System.out.println("Error: Problem with file " + transaction_DB_File + ".");
+      }
   }
 
   /**
@@ -331,7 +303,6 @@ public class TransactionDB implements Serializable{
    * @throws Exception (throws Exception)
    */
   public void writeToFile() throws Exception {
-
       try {
           FileOutputStream fos = new FileOutputStream(transaction_DB_File);
           ObjectOutputStream oos = new ObjectOutputStream(fos);
@@ -349,37 +320,44 @@ public class TransactionDB implements Serializable{
    * Displays list of all completed transactions <br><br>
    *
    */
-  public void displayTransactions() {
+  public int displayTransactions() {
+    if(transactions.isEmpty()){
+      System.out.println("There are no transactions at this time Please add some or check to make sure you are using correct user database");
+      return -1;
+    }
 
       SimpleDateFormat sdf = new SimpleDateFormat("EEE, MM/dd/yyyy");
-
-      System.out.print("---------------------------------------------------");
-      System.out.println("--------------------------------------");
+      String format = "|%-15s|%-16s|%-15s|%-15s|%-15s|";
+      System.out.print("-----------------------------------------------------------");
+      System.out.println("-----------------------");
       System.out.printf(
-                    "|%10s|%10s|%10s|%10s|%-10s|",
+                    format,
                     "Item ID","Sale Date",
                     "Quantity",
                     "Customer ID ",
                     "Employee ID"
                   );
-      System.out.print("---------------------------------------------------");
-      System.out.println("--------------------------------------");
-
+      System.out.println();
+      System.out.print("-----------------------------------------------------------");
+      System.out.println("-----------------------");
       for (Transaction transaction : transactions) {
 
           System.out.printf(
-                      "|%10s|%10s|%10s|%10s|%-10s|",
+                      format,
                       transaction.getItemId(),
                       sdf.format(transaction.getSaleDate()),
-                      transaction.getQuantity(),
+                      transaction.getSaleQuantity(),
                       transaction.getEmployeeID(),
                       transaction.getCustomerID()
                   );
+          System.out.println();
+          System.out.print("-----------------------------------------------------------");
+          System.out.println("-----------------------");
       }
-
-      System.out.print("---------------------------------------------------");
-      System.out.println("--------------------------------------");
-
+      System.out.println();
+      System.out.print("-----------------------------------------------------------");
+      System.out.println("-----------------------");
+      return 0;
   }
 
 

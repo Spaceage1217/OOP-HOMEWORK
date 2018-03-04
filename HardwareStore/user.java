@@ -7,9 +7,14 @@
 @see UserInterface
 *
 */
+import java.io.Serializable;
 
 
-public class User{
+public class User implements Serializable {
+
+
+  private static final long serialVersionUID = 1L;
+
   /**
    *   Constructs a Item object
        @param aID the the user ID.
@@ -18,11 +23,7 @@ public class User{
    *
    */
    public User(int aID, String aFirstName, String aLastName){
-       if(aID){
-         ID = UUID.randomUUID();
-       }else{
-         ID = aID;
-       }
+        ID = aID;
         firstName = aFirstName;
         lastName = aLastName;
    }

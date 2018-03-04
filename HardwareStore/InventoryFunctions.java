@@ -1,5 +1,6 @@
 /**
- *    A class containing database functions for inventory
+ *
+ A class containing database functions for inventory
  @author Dimeji Faluyi
  @version 2/7/2018
  @see UserInterface
@@ -23,10 +24,16 @@ import java.io.IOException;
 import java.io.PrintWriter;
 import java.io.FileWriter;
 import java.util.UUID;
+import java.io.Serializable;
+
+import java.io.*;
+
 
 
 public class InventoryFunctions implements Serializable
 {
+  private static final long serialVersionUID = 1L;
+
 
   /**
   *
@@ -35,15 +42,16 @@ public class InventoryFunctions implements Serializable
   */
   private List<Item> items;
   private String inventory_DB_File;
+
   public InventoryFunctions(){
     items = new ArrayList<Item>();
   }
 
-  public InventoryFunctions(String aInventory_DB_File){
+  public InventoryFunctions(String aInventory_DB_File) throws Exception{
    items = new ArrayList<Item>();
    inventory_DB_File = aInventory_DB_File;
    try{
-     loadFromFile(inventory_DB_File);
+     loadFromFile();
    }
    catch(FileNotFoundException e)
    {
@@ -64,26 +72,53 @@ public class InventoryFunctions implements Serializable
       @param items
   *
   */
-  public  void displayItems(){
+  public int displayItems(){
+    if(items.isEmpty()){
+      System.out.println("There are no items at this time Please add some or check to make sure you are using correct user database");
+      return -1;
+    }
+    String category;
+    String brand;
+    String type;
+    int brandLength = 20;
     int index = 0;
-    System.out.print("---------------------------------------------------");
-    System.out.println("--------------------------------------");
-    System.out.printf(headingFormat,"#","ID#",  "Name","Category","Quantity","Price");
-    System.out.print("---------------------------------------------------");
-    System.out.println("--------------------------------------");
+    System.out.print("----------------------------------------------------------");
+    System.out.print("----------------------------------------------------------");
+    System.out.println("-----------------");
+    System.out.printf(headingFormat,"#","ID#","Name","Category","Brand","Type","Quantity","Price");
+    System.out.print("----------------------------------------------------------");
+    System.out.print("----------------------------------------------------------");
+    System.out.println("-----------------");
+
 
 		for (Item item : items){
+     category ="N/A";
+     brand = "N/A";
+     type = "N/A";
+     if( item instanceof SmallHardwareItem){
+       category = ((SmallHardwareItem)item).getCategory();
+     }
+
+     else if( item instanceof Appliances){
+       type = ((Appliances)item).getType();
+       brand = ((Appliances)item).getBrand();
+       if( brand.length() > brandLength){
+          brand = brand.substring(0,brandLength)+"...";
+       }
+     }
 			System.out.printf(
                           tableFormat,
                           index+1,
-                          item.getId(), item.getName(),
-                          item.getCategory(), item.getQuantity(),
+                          item.getId(),item.getName(),
+                          category,brand,type,item.getQuantity(),
                           item.getPrice()
                         );
       index++;
 		}
-    System.out.print("---------------------------------------------------");
-    System.out.println("--------------------------------------");
+    System.out.print("----------------------------------------------------------");
+    System.out.print("----------------------------------------------------------");
+    System.out.println("-----------------");
+    return 0;
   }
 
   /**
@@ -93,25 +128,52 @@ public class InventoryFunctions implements Serializable
   *
   */
 
-  private  void displayItems(List<Item> subSet){
-    tableFormat = "|%10s|%20s|%20s|%10s|%10.2f|\n";
-    headingFormat = "|%10s|%20s|%20s|%10s|%10s|\n";
-    System.out.print("---------------------------------------------------");
-    System.out.println("--------------------------------------");
-    System.out.printf(headingFormat,"ID#",  "Name","Category","Quantity","Price");
-    System.out.print("---------------------------------------------------");
-    System.out.println("--------------------------------------");
+  private int displayItems(List<Item> subSet){
+    if(items.isEmpty()){
+      System.out.println("There are no items at this time Please add some or check to make sure you are using correct user database");
+      return -1;
+    }
+    String category;
+    String brand;
+    String type;
+    int brandLength = 20;
+    tableFormat = "|%10s|%20s|%23s|%23s|%23s|%10s|%10.2f|\n";
+    headingFormat = "|%10s|%20s|%23s|%23s|%23s|%10s|%10s|\n";
+    System.out.print("----------------------------------------------------------");
+    System.out.print("----------------------------------------------------------");
+    System.out.println("-------------");
+    System.out.printf(headingFormat,"ID#","Name","Category","Brand","Type","Quantity","Price");
+
+    System.out.print("----------------------------------------------------------");
+    System.out.print("----------------------------------------------------------");
+    System.out.println("-------------");
 
 		for (Item item : subSet){
-			System.out.printf(
-                          tableFormat,
-                          item.getId(), item.getName(),
-                          item.getCategory(), item.getQuantity(),
-                          item.getPrice()
-                        );
+      category ="N/A";
+      brand = "N/A";
+      type = "N/A";
+      if( item instanceof SmallHardwareItem){
+        category = ((SmallHardwareItem)item).getCategory();
+      }
+
+      else if( item instanceof Appliances){
+        type = ((Appliances)item).getType();
+        brand = ((Appliances)item).getBrand();
+        if( brand.length() > brandLength){
+           brand = brand.substring(0,brandLength)+"...";
+        }
+      }
+       System.out.printf(
+                           tableFormat,
+                           item.getId(),item.getName(),
+                           category,brand,type,item.getQuantity(),
+                           item.getPrice()
+                         );
 		}
-    System.out.print("---------------------------------------------------");
-    System.out.println("--------------------------------------");
+    System.out.print("----------------------------------------------------------");
+    System.out.print("----------------------------------------------------------");
+    System.out.println("-------------");
+    return 0;
   }
 
   /**
@@ -121,23 +183,49 @@ public class InventoryFunctions implements Serializable
   *
   */
 
-  private  void displayItem(int index, List<Item> items){
-    System.out.print("---------------------------------------------------");
-    System.out.println("--------------------------------------");
-    System.out.printf(headingFormat,"#","ID#",  "Name","Category","Quantity","Price");
-    System.out.print("---------------------------------------------------");
-    System.out.println("--------------------------------------");
+  private int displayItem(int index, List<Item> items){
+    if(items.isEmpty()){
+      System.out.println("There are no items at this time Please add some or check to make sure you are using correct user database");
+      return -1;
+    }
+    String category;
+    String brand;
+    String type;
+    int brandLength = 20;
+    System.out.print("----------------------------------------------------------");
+    System.out.print("----------------------------------------------------------");
+    System.out.println("-----------------");
+    System.out.printf(headingFormat,"#","ID#","Name","Category","Brand","Type","Quantity","Price");
+    System.out.print("----------------------------------------------------------");
+    System.out.print("----------------------------------------------------------");
+    System.out.println("-----------------");
+    Item item = items.get(index);
+    category ="N/A";
+    brand = "N/A";
+    type = "N/A";
+    if( item instanceof SmallHardwareItem){
+      category = ((SmallHardwareItem)item).getCategory();
+    }
 
-      System.out.printf(
-                          tableFormat,
-                          index+1,
-                          items.get(index).getId(), items.get(index).getName(),
-                          items.get(index).getCategory(), items.get(index).getQuantity(),
-                          items.get(index).getPrice()
-                        );
+    else if( item instanceof Appliances){
+      type = ((Appliances)item).getType();
+      brand = ((Appliances)item).getBrand();
+      if( brand.length() > brandLength){
+         brand = brand.substring(0,brandLength)+"...";
+      }
+    }
+     System.out.printf(
+                         tableFormat,
+                         index+1,
+                         item.getId(),item.getName(),
+                         category,brand,type,item.getQuantity(),
+                         item.getPrice()
+                       );
 
-    System.out.print("---------------------------------------------------");
-    System.out.println("--------------------------------------");
+    System.out.print("----------------------------------------------------------");
+    System.out.print("----------------------------------------------------------");
+    System.out.println("-----------------");
+    return 0;
   }
 
   /**
@@ -147,7 +235,7 @@ public class InventoryFunctions implements Serializable
   *
   */
 
-  public  void changeQuantity(String type){
+  public void changeQuantity(String type){
 
     displayItems();
     Scanner in = new Scanner(System.in);
@@ -204,15 +292,14 @@ public class InventoryFunctions implements Serializable
     *
     */
     public Item search(String itemID){
-      Item filterdItems = new ArrayList<Item>();
+      List<Item> filterdItems = new ArrayList<Item>();
       filterdItems = filter(item -> item.getId().contains(itemID),items);
       if(filterdItems.isEmpty()){
         return null;
       }else{
-        return filterdItems.get(0);
         displayItems(filterdItems);
+        return filterdItems.get(0);
       }
-      return 0;
     }
 
 
@@ -283,12 +370,11 @@ public class InventoryFunctions implements Serializable
     String id ="";
     int quantity;
     float price;
-    String category;
-    String brand;
-    String type;
-    String applianceType;
+    String category = "";
+    String brand = "";
+    String applianceType ="";
     int choice;
-    Item newItem;
+    Item newItem = null;
 
     System.out.println("Enter the "+type+"'s Name");
     itemName = in.nextLine();
@@ -306,8 +392,8 @@ public class InventoryFunctions implements Serializable
       in.next();
     }
     price = in.nextFloat();
-
-    if(type == "smallHardwareItems"){
+    in.nextLine();
+    if(type.equals("smallHardwareItem")){
       System.out.println("Which category does the item belong to");
       System.out.println("Enter 1 for Door&Window");
       System.out.println("Enter 2 for Cabinet&Furniture");
@@ -348,7 +434,7 @@ public class InventoryFunctions implements Serializable
         case 4:
           category = "Structural";
         case 5:
-          category = "Other"
+          category = "Other";
       }
       newItem = new SmallHardwareItem(
                     id,
@@ -359,7 +445,7 @@ public class InventoryFunctions implements Serializable
                 );
     }
 
-    if(type == "appliances"){
+    if(type.equals("appliance")){
       System.out.println("Enter the brand Name");
       brand = in.nextLine();
       System.out.println("Which type does the item belong to");
@@ -402,7 +488,7 @@ public class InventoryFunctions implements Serializable
         case 4:
           applianceType = "Small Appliences";
         case 5:
-          applianceType = "Other"
+          applianceType = "Other";
       }
 
       newItem = new Appliances(
@@ -411,12 +497,12 @@ public class InventoryFunctions implements Serializable
                     quantity,
                     price,
                     brand,
-                    applianceType,
+                    applianceType
                 );
 
     }
 
-    itmes.add(newItem);
+    items.add(newItem);
     return newItem;
 
   }
@@ -429,27 +515,46 @@ public class InventoryFunctions implements Serializable
       @return new item
   *
   */
-  public int deletItem(int ID){
-    for (Item item : subSet){
-      if(item.getId == ID){
+  public int deletItem(){
+    Scanner in = new Scanner(System.in);
+    String ID;
+    System.out.println("Please enter the ID of the item you wish to delete");
+    displayItems();
+    ID = in.nextLine();
+    while(ID.length() != 5) {
+      System.out.println("Invalid input please make sure your id is 5 characters long");
+      System.out.println("Enter the ID of the item you wish to delete");
+      ID = in.nextLine();
+    }
+
+    for (Item item : items){
+      if(item.getId() == ID){
         items.remove(item);
         return 0;
       }
     }
+    System.out.println("ID not found please make sure you entered the correct ID");
     return -1;
   }
 
   /**
 	Loads data from database text file
-	@param inventory_DB_File is the name of the previous database file
 	@throws FileNotFoundException when there is no previous database file matching the inventory_DB_File
   @throws IOException if input file name not entered properly.
 	*/
-	private void loadFromFile(String inventory_DB_File) throws Exception
+	private void loadFromFile() throws Exception
 	{
-    FileInputStream fis = new FileInputStream(db_File);
-    ObjectInputStream ois = new ObjectInputStream(fis);
-    items = (ArrayList<Item>) ois.readObject();
+    try{
+        FileInputStream fis = new FileInputStream(inventory_DB_File);
+        ObjectInputStream ois = new ObjectInputStream(fis);
+        items = (ArrayList<Item>) ois.readObject();
+    }
+    catch (FileNotFoundException e) {
+         FileOutputStream fos = new FileOutputStream(inventory_DB_File, false);
+     }
+     catch (IOException e) {
+       System.out.println("Error: Problem with file " + inventory_DB_File + ".");
+     }
 	}
 
   /**
@@ -457,10 +562,10 @@ public class InventoryFunctions implements Serializable
   @param inventory_DB_File is the name of the previous database file
   @throws IOException if error writing to file
   */
-  public void writeToFile(String inventory_DB_File) throws Exception
+  public void writeToFile() throws Exception
   {
     try {
-        FileOutputStream fos = new FileOutputStream(users_DB_File);
+        FileOutputStream fos = new FileOutputStream(inventory_DB_File);
         ObjectOutputStream oos = new ObjectOutputStream(fos);
 
         oos.writeObject(items);
@@ -474,6 +579,14 @@ public class InventoryFunctions implements Serializable
 
 
 
+  /**
+  * Getter
+  * @return users .
+  *
+  */
+  protected final List<Item> getItems(){
+        return items;
+  }
 
   /**
   *
@@ -488,6 +601,6 @@ public class InventoryFunctions implements Serializable
   }
 
 
-  private String tableFormat = "|%5s|%10s|%20s|%20s|%10s|%10.2f|\n";
-  private String headingFormat = "|%5s|%10s|%20s|%20s|%10s|%10s|\n";
+  private String tableFormat = "|%5s|%10s|%20s|%23s|%23s|%23s|%10s|%10.2f|\n";
+  private String headingFormat = "|%5s|%10s|%20s|%23s|%23s|%23s|%10s|%10s|\n";
 }

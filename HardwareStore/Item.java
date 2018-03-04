@@ -8,10 +8,13 @@
 *
 */
  import java.util.UUID;
+ import java.io.Serializable;
 
 
-public class Item
+public class Item implements Serializable
 {
+  private static final long serialVersionUID = 1L;
+
 	  /**
 	   *   Constructs a Item object
          @param aID the the item id.
@@ -21,7 +24,7 @@ public class Item
          @param aCategory the item category
 	   *
      */
-	   public Item(String aID, String aItemName, int aQuantity, float aPrice, String aCategory){
+	   public Item(String aID, String aItemName, int aQuantity, float aPrice){
              if(aID.isEmpty()){
                id = (aItemName).substring(0,2)+ UUID.randomUUID().toString().substring(0,3);
              }else{
@@ -75,7 +78,7 @@ public class Item
 					protected final float getPrice(){
 							return price;
 									}
-        
+
 
 		     private String itemName;
 				 private String id;

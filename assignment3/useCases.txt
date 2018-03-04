@@ -1,0 +1,128 @@
+Use Cases:
+  Customer:
+    Online:
+      -Log In
+        > 1.The User enters User name and password to login form
+        > 2.The login form submits the credentials for authentication
+        > 3.The User is authenticated and now logged in
+        Variation: Not verified
+          > 1.1.Start at step 1.
+          > 1.2.The User is not authenticated and is denied access and the option to try again
+      -Add Items to shopping cart
+        > 1.The User selects an item from the webpage
+        > 2.The User selects the quantity of the Item
+        > 3.The User adds item into the shopping cart
+      -Checkout
+        > 1.The User goes to checkout page
+        > 2.The User enters credit card info
+        > 3.The credit card info is verified
+        > 4.The User confirms purchase and its completed
+        > The transaction is sent to the transaction Database with pending status
+        > The User is sent a pickup data
+        Variation 1: Not verified
+          > 1.1.Start at step 3
+          > 1.2.The credit card account is not authenticated and the user is taken back to enter card info page
+        Variation 2: Cancelation
+          > 1.1.Any step between 1-4
+          > 1.2.The User logs out/cancel/connection drop
+          > 1.3.No transaction is made and cart is emptied
+          > 1.4.State of the website is restored prior to Case
+      -User Edit
+        > 1.Check user authentication make sure session is not expired
+        > 2.Allow user to make edits to account
+        > 3.Once user is done ask user to save to finalize edits
+        Variation 1: Not verified
+          > 1.1.Start at step 1
+          > 1.2.User is not verified
+          > 1.3.Route user back to login/Signup and ask for credentials
+        Variation 2: Cancelation
+          > 1.1.Any step between 2-3
+          > 1.2.The User logs out/cancel/connection drop
+          > 1.3.No edits are made to pre existing user info
+          > 1.4.State of the website is restored prior to Case
+      -User contact store
+        > 1.Check user authentication and make sure session is not expired
+        > 2.User types message
+        > 3.User confirms messages and sends it to store
+        > 4.User receives a confirmation that message has been delivered
+        Variation 1: Not Verified
+          > 1.1.Start at step 1
+          > 1.2.User is not verified
+          > 1.3.Route user back to login/Signup and ask for credentials
+        Variation 2: Cancelation
+          > 1.1.Any step between 2-3
+          > 1.2.The User logs out/cancel/connection drop
+          > 1.3.The message is not sent
+          > 1.4.State of the website is restored prior to Case
+    At store:
+      -User wants to make purchase
+        > 1.User selects Items and Quantity
+        > 2.Employee completes transaction
+        Variation 1: Item does not exist
+          > 1.1.Start at step 1
+          > 1.2.User is told item does not exist
+        Variation 2: Quantity does not exist
+          > 1.1.Start at step 1
+          > 1.2.User is told quantity does not exist
+        Variation 3: Cancelation
+          > 1.1.Before step 2
+          > 1.2.The user decides to cancel purchase
+          > 1.3.Transaction is not made
+  Employee:
+    At store:
+      -Completing transaction
+        > 1.User wants to make transaction
+        > 2.Verify Item name and quantity in Hardware Store DB
+        > 3.Enter user ID and Employee ID
+        > 4.Complete transaction
+        > 5.Update Transaction database
+        > 6.Update Accounting database
+        > 7.Update Hardware store database
+        Variation 1: Item does not exist
+          > 1.1.Start at step 2
+          > 1.2.User is told item does not exist
+        Variation 2: Quantity does not exist
+          > 1.1.Start at step 2
+          > 1.2.User is told quantity does not exist
+        Variation 3: ID does not exist
+          > 1.1.Start at step 3
+          > 1.2.ID does not exist for User
+          > 1.3.Prompted to add create a new User
+        Variation 4: Cancelation
+          > 1.1.Before step 4
+          > 1.2.The user decides to cancel purchase
+          > 1.3.Transaction is not made
+      -Add new item or change quantity of existing
+        > 1.Employee selects add new Item or change quantity of existing
+        Variation 1: Add new item
+          > 1.1.Start at step 1.
+          > 1.2.Employee selects option to add new item into the Hardware Database
+          > 1.3.Employee selects type of item
+          > 1.4.Employee enters relevant fields for item
+          > 1.5.New Item is stored in databases
+          Sub-Variation 2.2: Item already exist
+            > 1.1.1.Start at step 1.4
+            > 1.1.2.Employee is notified Item already exit and is ask if he would like to update quantity of item or exit
+        Variation 2: Change Quantity
+          > 1.1.Start at step 1
+          > 1.2.Employee selects option to add to quantity of pre-existing item
+          > 1.3.Employee searches for ID of item
+          > 1.4.Employee adds new quantity to existing quantity.
+          Sub-Variation 2.2: ID does not exist
+            > 1.1.1.Start at step 1.3
+            > 1.1.2.Employee is notified ID does not exist is given option to try again or quit.
+      -Add new User
+        > 1.Employee adds a new user into the database and selects the type of user he wants to add
+        Variation 1: Add new Employee
+          > 1.1.Start at step 1.
+          > 1.2.Employee selects option to add new Employee into the User Database
+          > 1.3.Employee enters relevant fields for Employee
+          > 1.4.new Employee is added into the database
+        Variation 2: Add new Customer
+          > 1.1.Start at step 1.
+          > 1.2.Employee selects option to add new Customer into the User Database
+          > 1.3.Employee enters relevant fields for Customer
+          > 1.4.new Customer is added into the database
+        Sub-Variation 1.1 and 2.2: User already exist
+          > 1.1.1.Start at step 1.3
+          > 1.1.2.Employee is notified Item already exit and is ask if he would like to update quantity of item or exit

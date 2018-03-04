@@ -15,7 +15,7 @@ public class Customer extends User{
   public Customer(int aID, String aFirstName, String aLastName, String aPhoneNumber, String aAddress){
     super(aID,aFirstName,aLastName);
     address = aAddress;
-    monthlySalary = aMonthlySalary;
+    phoneNumber = aPhoneNumber;
   }
 
 
