@@ -54,6 +54,15 @@ Use Cases:
           > 1.2.The User logs out/cancel/connection drop
           > 1.3.The message is not sent
           > 1.4.State of the website is restored prior to Case
+      -Customer cancels order within 24 hours
+        > 1.Check authentication of customer
+        > 2.Customer selects specific items or whole order in which he wishes to cancel
+        > 3.Hardware store is notified and order is removed or changed in transactions database
+        > 4.Cancel confirmation is given to user
+        Variation 1: Cancelation
+          > 1.1.Before step 3
+          > 1.2.order is not changed or canceled store is not canceled
+
     At store:
       -User wants to make purchase
         > 1.User selects Items and Quantity
@@ -72,30 +81,44 @@ Use Cases:
     At store:
       -Completing transaction
         > 1.User wants to make transaction
-        > 2.Verify Item name and quantity in Hardware Store DB
-        > 3.Enter user ID and Employee ID
-        > 4.Complete transaction
-        > 5.Update Transaction database
-        > 6.Update Accounting database
-        > 7.Update Hardware store database
-        Variation 1: Item does not exist
+        > 2.Employee enters pin for verification
+        > 3.Verify Item name and quantity in Hardware Store DB
+        > 4.Enter user ID and Employee ID
+        > 5.Complete transaction
+        > 6.Update Transaction database
+        > 7.Update Accounting database
+        > 8.Update Hardware store database
+        Variation 1: Employee not verified
           > 1.1.Start at step 2
-          > 1.2.User is told item does not exist
-        Variation 2: Quantity does not exist
-          > 1.1.Start at step 2
-          > 1.2.User is told quantity does not exist
-        Variation 3: ID does not exist
+          > 1.2.Pin not authenticated
+          > 1.3.Employee is asked to try again or cancel
+          > 1.4 After 5 tries Employee is locked out till admin comes
+        Variation 2: Item does not exist
           > 1.1.Start at step 3
+          > 1.2.User is told item does not exist
+        Variation 3: Quantity does not exist
+          > 1.1.Start at step 3
+          > 1.2.User is told quantity does not exist
+        Variation 4: ID does not exist
+          > 1.1.Start at step 4
           > 1.2.ID does not exist for User
           > 1.3.Prompted to add create a new User
-        Variation 4: Cancelation
-          > 1.1.Before step 4
+        Variation 5: Cancelation
+          > 1.1.Before step 5
           > 1.2.The user decides to cancel purchase
           > 1.3.Transaction is not made
+          > 1.4.Return back to main menu
       -Add new item or change quantity of existing
-        > 1.Employee selects add new Item or change quantity of existing
-        Variation 1: Add new item
-          > 1.1.Start at step 1.
+        > 1.Employee wants to add new Item or change the quantity of an existing one
+        > 2.Employee enters pin for verification
+        > 3.Employee is prompted with menu to add or change existing item quantity
+        Variation 1: Employee not verified
+          > 1.1.Start at step 2
+          > 1.2.Pin not authenticated
+          > 1.3.Employee is asked to try again or cancel
+          > 1.4 After 5 tries Employee is locked out till admin comes
+        Variation 2: Add new item
+          > 1.1.Start at step 3.
           > 1.2.Employee selects option to add new item into the Hardware Database
           > 1.3.Employee selects type of item
           > 1.4.Employee enters relevant fields for item
@@ -103,7 +126,7 @@ Use Cases:
           Sub-Variation 2.2: Item already exist
             > 1.1.1.Start at step 1.4
             > 1.1.2.Employee is notified Item already exist and is ask if they would like to update quantity of item or exit
-        Variation 2: Change Quantity
+        Variation 3: Change Quantity
           > 1.1.Start at step 1
           > 1.2.Employee selects option to add to quantity of pre-existing item
           > 1.3.Employee searches for ID of item
@@ -111,34 +134,83 @@ Use Cases:
           Sub-Variation 2.2: ID does not exist
             > 1.1.1.Start at step 1.3
             > 1.1.2.Employee is notified ID does not exist is given option to try again or quit.
-        Variation 3: Cancelation
+        Variation 4: Cancelation
           > 1.1.Before step 1.4 for either variation 1 or 2
           > 1.2.The Employee cancels
           > 1.3.Item is not created or changed
+          > 1.4.Return back to main menu
       -Add new User
-        > 1.Employee adds a new user into the database and selects the type of user he/she wants to add
-        Variation 1: Add new Employee
-          > 1.1.Start at step 1.
-          > 1.2.Employee selects option to add new Employee into the User Database
-          > 1.3.Employee enters relevant fields for Employee
-          > 1.4.new Employee is added into the database
-        Variation 2: Add new Customer
-          > 1.1.Start at step 1.
-          > 1.2.Employee selects option to add new Customer into the User Database
-          > 1.3.Employee enters relevant fields for Customer
-          > 1.4.new Customer is added into the database
-        Sub-Variation 1.1 and 2.2: User already exist
-          > 1.1.1.Start at step 1.3
-          > 1.1.2.Employee is notified User already exist and is ask if they would like to update User or exit
+        > 1.Employee wants to add a new Customer into the database
+        > 2.Employee enters pin for verification
+        > 3.Employee selects option to add new Customer into the User Database
+        > 4.Employee enters relevant fields for Customer
+        > 5.new Customer is added into the database
+        Variation 1: Employee not verified
+          > 1.1.Start at step 2
+          > 1.2.Pin not authenticated
+          > 1.3.Employee is asked to try again or cancel
+          > 1.4 After 5 tries Employee is locked out till admin comes
+        Variation 2: User already exist
+          > 1.1.Start at step 4
+          > 1.2.Employee is notified User already exist and is ask if they would like to update User or exit
         Variation 3: Cancelation
-          > 1.1.Before step 1.4 for either variation 1 or 2
+          > 1.1.Before step 5
           > 1.2.The Employee cancels
           > 1.3.User is not created or changed
       -Reply to Customer message
-        > 1.First message is viewed from the message queue
+        > 1.Employee wants to
         > 2.Employee responds to message and submits
         > 3.Message is sent to user
         > 3.Once message is confirmed and sent, the message is de-queued from the message queue
         Variation 1: Cancelation
           > 1.1.Before step 3
           > 1.2.Message is not sent and remains on the queue
+          > 1.3.Return back to main menu
+
+
+  Administrator
+      -Add/edit new Employee
+        > 1.Admin enters relevant fields to add/edit Employee
+        Variation 1: New Employee
+          > 1.1.Start from step 1
+          > 1.2.Enter new Employee info
+          > 1.3.User Database is updated
+         Sub-Variation 1: Employee already Exist
+            > 1.1.1.Start from step 1.2
+            > 1.1.2.Prompt admin to edit Employee or quit
+        Variation 2: Edit Employee
+          > 1.1.Start from step 1
+          > 1.2.Select field you wish to change
+          > 1.3.Enter value for field and submit
+          > 1.4.User Database is updated
+        Variation 3: Cancelation
+          > 1.1.At any time before Database is updated
+          > 1.2.User is not updated
+          > 1.3.Return back to main menu
+      -Pay Expenses
+        > 1.Grab Total Expenses that need to be paid for from Accounting Management
+        > 2.Pay Expenses if there are sufficient funds
+        Variation 1: insufficient funds
+          > 1.1.Start at step 2.
+          > 1.2.If funds are insufficient alert Admin
+          > 1.3.Cancel the payment and return back to main menu
+        Variation 2: Cancelation
+          > 1.1.Before step 2
+          > 1.2.Payment is canceled
+          > 1.3.Return back to main menu
+      -Get revenue
+        > 1.Get revenue from Accounting Management
+        > 2.View report
+        > 3.Option to print report
+        Variation 1: Cancelation
+          > 1.1.Before step 2
+          > 1.2.Report is canceled
+          > 1.3.Return back to main menu
+      -Print report
+        > 1.Admin print financial report
+        > 2.Report is printed
+        > 3.Admin is back to the main menu
+        Variation 1:  Cancelation
+        > 1.1.Before step 2
+        > 1.2.Report is canceled
+        > 1.3.Return back to main menu
