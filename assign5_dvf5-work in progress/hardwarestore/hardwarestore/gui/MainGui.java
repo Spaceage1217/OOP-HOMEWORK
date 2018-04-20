@@ -141,31 +141,32 @@ public class MainGui extends JFrame implements MouseListener, WindowListener {
      */
     @Override
     public void mouseClicked(MouseEvent e) {
+    	DisplayItems displayItems; // since it will be reused a lot
         switch (menuList.getSelectedIndex()) {
             case 0:
-                //user selects 'show all packages'
+                //user selects 'show all item'
                 LOGGER.info("User selects: Show All Items");
-                DisplayItems displayItems = new DisplayItems();
+                displayItems = new DisplayItems("");
                 displayItems.setLocation(this.getX(), this.getY());
                 break;
             case 1:
-                //user selects 'add a new package'
+                //user selects 'add a new item'
                 LOGGER.info("User selects: Add a New Item or Change Quantity of an exisiting item");
                 AddOrChangeItem addOrChangeItem = new AddOrChangeItem();
                 addOrChangeItem.setLocation(this.getX(), this.getY());
                 break;
-//            case 2:
-//                //user selects 'delete a package'
-//                LOGGER.info("User selects: Delete a Package");
-//                DeletePackage dp = new DeletePackage();
-//                dp.setLocation(this.getX(), this.getY());
-//                break;
-//            case 3:
-//                //user selects 'search for a package'
-//                LOGGER.info("User selects: Search for a Package");
-//                SearchPackage searchPackage = new SearchPackage();
-//                searchPackage.setLocation(this.getX(), this.getY());
-//                break;
+            case 2:
+                //user selects 'delete a item'
+                LOGGER.info("User selects: Delete Item");
+                displayItems = new DisplayItems("delete");
+                displayItems.setLocation(this.getX(), this.getY());
+                break;
+            case 3:
+                //user selects 'search for a package'
+                LOGGER.info("User selects: Search for a item");
+                displayItems = new DisplayItems("search");
+                displayItems.setLocation(this.getX(), this.getY());
+                break;
 //            case 4:
 //                //user selects 'show all users
 //                LOGGER.info("User selects: Show All Users");

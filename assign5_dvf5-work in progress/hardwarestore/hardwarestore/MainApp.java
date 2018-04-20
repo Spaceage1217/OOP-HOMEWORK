@@ -135,6 +135,7 @@ public class MainApp extends JFrame {
                     System.out.println("Illegal input: Must input a float.");
                     CONSOLE_INPUT.nextLine();
                     continue;
+                  
                 }
                 break;
 

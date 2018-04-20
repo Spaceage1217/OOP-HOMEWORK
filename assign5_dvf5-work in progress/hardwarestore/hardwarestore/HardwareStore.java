@@ -56,9 +56,9 @@ public class HardwareStore {
         return getFormattedItemList(itemList);
     }
     /**
-     * Get an array of items stored in DB
+     * Get items stored in DB
      * 
-     * @return itemList
+     * @return a formatted String representation of all the items in itemList.
      */
     
     public List<Item> getItems(){
@@ -251,6 +251,26 @@ public class HardwareStore {
             return null;
         } else {
             return getFormattedItemList(temp);
+        }
+    }
+    
+    /**
+     * Returns all the items that (partially) match the given name.
+     * @param name the name to match.
+     * @return a string containing a table of the matching items.
+     */
+    public List<Item> getMatchingItemsList(String name) {
+        ArrayList<Item> temp = new ArrayList<Item>();
+        for (Item tempItem : itemList) {
+            if (tempItem.getName().toLowerCase().contains(name.toLowerCase())) {
+                temp.add(tempItem);
+            }
+        }
+        
+        if (temp.size() == 0) {
+            return null;
+        } else {
+            return temp;
         }
     }
 

@@ -67,7 +67,7 @@ public abstract class Item implements Serializable {
      */
     public int getQuantity() {
         return quantity;
-    }
+    } 
 
     /**
      * This method set the item's quantity.
