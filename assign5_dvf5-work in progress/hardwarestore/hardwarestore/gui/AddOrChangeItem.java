@@ -217,8 +217,7 @@ public class AddOrChangeItem  extends JFrame implements ItemListener, ActionList
 			}
 			catch(NullPointerException exp) {
 				canSubmit = false;
-				JOptionPane.showMessageDialog(new JFrame(),"Invalid Form. "
-                        +  "Form contains multiple empty fields");
+				
 			}
 			
 			try {
@@ -226,7 +225,9 @@ public class AddOrChangeItem  extends JFrame implements ItemListener, ActionList
 				if(itemBrandName.length() < 1)
 				{
 					canSubmit = false;
-					JOptionPane.showMessageDialog(new JFrame(),"Invalid Brand Name. "
+					JFrame message = new JFrame();
+					message.setAlwaysOnTop(true);
+					JOptionPane.showMessageDialog(message,"Invalid Brand Name. "
 	                        +  "Brand Name cannot be left blank");
 				}
 			}
@@ -236,14 +237,18 @@ public class AddOrChangeItem  extends JFrame implements ItemListener, ActionList
 			
 			if(itemCatogery == null) {
 				canSubmit = false;
-				JOptionPane.showMessageDialog(new JFrame(),"Invalid Category Name. "
+				JFrame message = new JFrame();
+				message.setAlwaysOnTop(true);
+				JOptionPane.showMessageDialog(message,"Invalid Category Name. "
                         +  "Category/Type cannot be left blank");
 			}
 			
 
-			if(itemName.length() < 1){
+			if(itemName.length() < 1 || itemName == null){
 				canSubmit = false;
-				JOptionPane.showMessageDialog(new JFrame(),"Invalid Name. "
+				JFrame message = new JFrame();
+				message.setAlwaysOnTop(true);
+				JOptionPane.showMessageDialog(message,"Invalid Name. "
                         +  "Name cannot be left blank");
 			}
 			
@@ -253,14 +258,18 @@ public class AddOrChangeItem  extends JFrame implements ItemListener, ActionList
 				if (actualPrice < 0 )
 					{
 						canSubmit = false;
-						JOptionPane.showMessageDialog(new JFrame(),"Invalid price. "
+						JFrame message = new JFrame();
+						message.setAlwaysOnTop(true);
+						JOptionPane.showMessageDialog(message,"Invalid price. "
 		                        + "Please check that price is not less than 0.");
 					}
 				
 			}
 			catch(NumberFormatException exp) {
 					canSubmit = false;
-					JOptionPane.showMessageDialog(new JFrame(),"Invalid price. "
+					JFrame message = new JFrame();
+					message.setAlwaysOnTop(true);
+					JOptionPane.showMessageDialog(message,"Invalid price. "
 	                        +  "Please enter numerical values only");
 			}
 			
@@ -269,14 +278,18 @@ public class AddOrChangeItem  extends JFrame implements ItemListener, ActionList
 				actualQuantity = Integer.parseInt(itemQuantity.trim());
 				if (actualQuantity < 0 ) {
 					canSubmit = false;
-					JOptionPane.showMessageDialog(new JFrame(),"Invalid Quantity. "
+					JFrame message = new JFrame();
+					message.setAlwaysOnTop(true);
+					JOptionPane.showMessageDialog(message,"Invalid Quantity. "
 	                        + "Please check that quantity is not less than 0.");
 					}
 				
 			} 
 			catch(NumberFormatException exp) {
 					canSubmit = false;
-					JOptionPane.showMessageDialog(new JFrame(),"Invalid Quantity. "
+					JFrame message = new JFrame();
+					message.setAlwaysOnTop(true);
+					JOptionPane.showMessageDialog(message,"Invalid Quantity. "
 	                        +  "Please enter numerical values only");
 			}
 			

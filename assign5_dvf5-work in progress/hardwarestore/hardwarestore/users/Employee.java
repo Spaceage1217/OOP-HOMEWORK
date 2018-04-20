@@ -70,5 +70,5 @@ public class Employee extends User {
         return String.format("| %-10s| %-9s| %-12s| %-12s| SSN: %12d, Salary: %10s        |%n",
                 "Employee", id, firstName, lastName, socialSecurityNumber, monthlySalary);
     }
-
+ 
 }

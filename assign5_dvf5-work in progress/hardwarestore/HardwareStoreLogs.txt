@@ -1,8 +1,6 @@
-Apr 19, 2018 9:33:02 PM hardwarestore.gui.MainGui <init>
+Apr 20, 2018 12:11:35 AM hardwarestore.gui.MainGui <init>
 INFO: App is now running
-Apr 19, 2018 9:33:04 PM hardwarestore.gui.MainGui mouseClicked
-INFO: User selects: Search for a item
-Apr 19, 2018 9:33:04 PM hardwarestore.gui.DisplayItems <init>
-INFO: User is now in search mode
-Apr 19, 2018 9:33:04 PM hardwarestore.gui.DisplayItems addRowsToTable
-INFO: Creating Items table
+Apr 20, 2018 12:11:37 AM hardwarestore.gui.MainGui mouseClicked
+INFO: User selects: Show All Users
+Apr 20, 2018 12:11:37 AM hardwarestore.gui.DisplayUsers addRowsToTable
+INFO: Creating user table

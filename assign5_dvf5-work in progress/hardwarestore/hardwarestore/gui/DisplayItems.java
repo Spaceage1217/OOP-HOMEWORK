@@ -36,7 +36,8 @@ public class DisplayItems  extends JFrame implements ActionListener{
     ArrayList<Item> items;
     
     /**
-     * The showItem constructor. creats a Jtable that will help display the items.
+     * The displayItems constructor. creats a Jtable that will help display the items.
+     * Based on mode the table will be search-able / editable
      */
   
     
@@ -171,7 +172,7 @@ public class DisplayItems  extends JFrame implements ActionListener{
     	    LOGGER.info("Creating search table");
 
     	    DefaultTableModel tableModel = (DefaultTableModel) itemDisplay.getModel();
-    	    //create array to speficiy what goes in the columns
+    	    //create array to specify what goes in the columns
     	    Object columns[] = new Object[6];
     	    
     	        for (Item item: items) {
@@ -249,8 +250,19 @@ public class DisplayItems  extends JFrame implements ActionListener{
 			if(e.getSource() == searchButton) {
 				try {
 					String query = searchBox.getText();
-	        	    itemDisplay.setModel(new DefaultTableModel(new Object[][] {}, columnNames));  	
-					addRowsToTable((ArrayList<Item>) store.getMatchingItemsList(query));
+					if(query.isEmpty()) {
+						JFrame message = new JFrame();
+						message.setAlwaysOnTop(true);
+						JOptionPane.showMessageDialog(message,"Invalid Form. "
+		                        +  "Search box cannot be empty");
+					}
+					else {
+						 itemDisplay.setModel(new DefaultTableModel(new Object[][] {}, columnNames)); 
+							addRowsToTable((ArrayList<Item>) store.getMatchingItemsList(query));
+						
+					}
+	        	   
+					
 				}catch(NullPointerException exp) {
 					JFrame message = new JFrame();
 					message.setAlwaysOnTop(true);

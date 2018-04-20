@@ -88,13 +88,23 @@ public class HardwareStore {
     }
 
     /**
-     * Method getAllItemsFormatted returns the current list of users in the Arraylist in
+     * Method getAllUsersFormatted returns the current list of users in the Arraylist in
      * no particular order.
      *
      * @return a formatted String representation of all the users in userList.
      */
     public String getAllUsersFormatted() {
         return getFormattedUserList(userList);
+    }
+    
+    /**
+     * Method getAllUsers returns the current list of users in the Arraylist in
+     * no particular order.
+     *
+     * @return userList.
+     */
+    public ArrayList<User> getAllUsers() {
+        return userList;
     }
 
     /**

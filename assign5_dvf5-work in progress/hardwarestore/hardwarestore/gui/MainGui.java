@@ -142,6 +142,7 @@ public class MainGui extends JFrame implements MouseListener, WindowListener {
     @Override
     public void mouseClicked(MouseEvent e) {
     	DisplayItems displayItems; // since it will be reused a lot
+    	DisplayUsers displayUsers; 
         switch (menuList.getSelectedIndex()) {
             case 0:
                 //user selects 'show all item'
@@ -167,18 +168,30 @@ public class MainGui extends JFrame implements MouseListener, WindowListener {
                 displayItems = new DisplayItems("search");
                 displayItems.setLocation(this.getX(), this.getY());
                 break;
-//            case 4:
-//                //user selects 'show all users
-//                LOGGER.info("User selects: Show All Users");
-//                ShowUsers su = new ShowUsers();
-//                su.setLocation(this.getX(), this.getY());
-//                break;
-//            case 5:
-//                //user selects 'add a new user
-//                LOGGER.info("User selects: Add a New User");
-//                AddUser au = new AddUser();
-//                au.setLocation(this.getX(), this.getY());
-//                break;
+            case 4:
+                //user selects 'show all users
+            	
+            	
+            	
+            	//NOT FINISHED-->
+
+            	
+                LOGGER.info("User selects: Show All Users");
+                displayUsers = new DisplayUsers("");
+                displayUsers.setLocation(this.getX(), this.getY());
+                break;
+            case 5:
+                //user selects 'add a new user
+            	
+            	
+            	//NOT FINISHED-->
+            	
+            	
+            	
+                LOGGER.info("User selects: Add a New User");
+                AddUser addUser = new AddUser();
+                addUser.setLocation(this.getX(), this.getY());
+                break;
 //            case 6:
 //                //user selects 'update an existing user
 //                LOGGER.info("User selects: Update an Existing User");
